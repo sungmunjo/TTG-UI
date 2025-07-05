@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link';
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 export default function Page() {
     const [email, setEmail] = useState('')
@@ -8,12 +8,31 @@ export default function Page() {
     const [confirm, setConfirm] = useState('')
     const [name, setName] = useState('')
     const [message, setMessage] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+    const [addressList, setAddressList] = useState<{ id: number; name: string }[]>([])
+    const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
+    const [address, setAddress] = useState('')
+
+    const openJusoPopup = () => {
+        const popup = window.open(
+            'register/addressPopup',
+            'popupWindow',
+            'width=570,height=420, scrollbars=yes, resizable=yes'
+        )
+
+        // 팝업과 통신할 콜백 등록
+        // window에 callback 함수를 등록
+        // window.jusoCallback = function (zipNo: string, roadAddrPart1: string) {
+        //     console.log('주소 선택됨:', roadAddrPart1)
+        //     setAddress(roadAddrPart1)
+        // }
+    }
 
     const registUser = async (e) => {
         e.preventDefault();
 
         if(password !== confirm){
-            setMessage('비밀번호가 일치하지 않습니다.');
+            setMessage('❌ 비밀번호가 일치하지 않습니다.');
             return;
         }
 
@@ -75,6 +94,31 @@ export default function Page() {
                             value={name}
                             onChange={e => setName(e.target.value)}
                             required/>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium mb-1 text-gray-700">전화 번호</label>
+                        <input
+                            type="number"
+                            className="w-full border rounded px-3 py-2 text-gray-800"
+                            value={phoneNumber}
+                            onChange={e => setPhoneNumber(e.target.value)}
+                            required/>
+                    </div>
+                    <label className="block text-sm font-medium mb-1 text-gray-700">주소</label>
+                    <div className="flex">
+                        <input
+                            type="text"
+                            value={address}
+                            readOnly
+                            className="flex-grow border rounded px-3 py-2"
+                        />
+                        <button
+                            type="button"
+                            onClick={openJusoPopup}
+                            className="ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                        >
+                            🔍
+                        </button>
                     </div>
                     <button
                         type="submit"
