@@ -1,26 +1,81 @@
-import Link from 'next/link';
-export default function Page() {
+'use client'
+
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+
+export default function page() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // 여기에 로그인 로직을 구현하세요
+        console.log('로그인 시도:', { email, password });
+    };
+
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h1 className="text-3xl font-bold mb-6 text-center text-gray-700">로그인</h1>
-                <form className="space-y-4">
-                    <div>
-                        <label className="block text-base font-medium mb-1 text-gray-700">이메일</label>
-                        <input type="email" className="w-full border rounded px-3 py-2 text-gray-800"/>
+        <Card className="w-full max-w-md mx-auto">
+            <CardHeader className="text-center space-y-2">
+                <CardTitle className="text-2xl">로그인</CardTitle>
+                <CardDescription>
+                    계정에 로그인하여 서비스를 이용하세요
+                </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="email">이메일</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="your@email.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                     </div>
-                    <div>
-                        <label className="block text-base font-medium mb-1 text-gray-700">비밀번호</label>
-                        <input type="password" className="w-full border rounded px-3 py-2 text-gray-800"/>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="password">비밀번호</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="비밀번호를 입력하세요"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
                     </div>
-                    <div>
-                        <Link href={"./register"} className='block text-base font-normal mb-1 text-right text-blue-600 underline underline-offset-2 decoration-1 hover:cursor-pointer hover:decoration-2 hover:font-bold hover:text-blue-400'>회원가입</Link>
+
+                    <div className="flex justify-end">
+                        <button
+                            type="button"
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                        >
+                            비밀번호를 잊으셨나요?
+                        </button>
                     </div>
-                    <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+
+                    <Button type="submit" className="w-full">
                         로그인
-                    </button>
+                    </Button>
                 </form>
-            </div>
-        </div>
-    )
+
+                <Separator />
+
+                <div className="text-center space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                        아직 계정이 없으신가요?
+                    </p>
+                    <Button variant="outline" className="w-full">
+                        회원가입
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
+    );
 }

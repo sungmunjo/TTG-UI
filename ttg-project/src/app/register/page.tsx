@@ -1,7 +1,10 @@
 'use client'
-import Link from 'next/link';
+
 import React, {useEffect, useState} from 'react'
-import useSWRMutation from 'swr/mutation'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input"
+import {Button} from "@/components/ui/button"
 
 export default function Page() {
     const [email, setEmail] = useState('')
@@ -59,79 +62,68 @@ export default function Page() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-                <h1 className="text-2xl font-bold mb-6 text-center text-gray-700">회원가입</h1>
-                <form className="space-y-4" onSubmit={registUser}>
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">이메일</label>
-                        <input
-                            type="email"
-                            className="w-full border rounded px-3 py-2 text-gray-800"
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            required/>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">비밀번호</label>
-                        <input
-                            type="password"
-                            className="w-full border rounded px-3 py-2 text-gray-800"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            required/>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">비밀번호 확인</label>
-                        <input
-                            type="password"
-                            className="w-full border rounded px-3 py-2 text-gray-800"
-                            value={confirm}
-                            onChange={e => setConfirm(e.target.value)}
-                            required/>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">이름</label>
-                        <input
-                            type="text"
-                            className="w-full border rounded px-3 py-2 text-gray-800"
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            required/>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1 text-gray-700">전화 번호</label>
-                        <input
-                            type="number"
-                            className="w-full border rounded px-3 py-2 text-gray-800"
-                            value={phoneNumber}
-                            onChange={e => setPhoneNumber(e.target.value)}
-                            required/>
-                    </div>
-                    <label className="block text-sm font-medium mb-1 text-gray-700">주소</label>
-                    <div className="flex">
-                        <input
-                            type="text"
-                            value={address}
-                            readOnly
-                            className="flex-grow border rounded px-3 py-2"
-                        />
-                        <button
-                            type="button"
-                            onClick={openJusoPopup}
-                            className="ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
-                            🔍
-                        </button>
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-                    >
-                        회원가입
-                    </button>
-                    {message && <p className="text-center text-red-500 text-sm mt-2">{message}</p>}
-                </form>
-            </div>
+            <form className="space-y-4 w-1/4" onSubmit={registUser}>
+                <Card className="w-full max-w-md">
+                    <CardHeader className="text-center space-y-2">
+                        <CardTitle className="text-2xl">회원가입</CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="space-y-6">
+
+                        <div className="space-y-2">
+                            <Label htmlFor="email">이메일</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="your@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="password">비밀번호</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                placeholder="비밀번호를 입력하세요"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="confirm-password">비밀번호 확인</Label>
+                            <Input
+                                id="confirm-password"
+                                type="password"
+                                placeholder="비밀번호를 다시 입력하세요"
+                                value={confirm}
+                                onChange={(e) => setConfirm(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="name">이름</Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                placeholder="이름을 입력하세요"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <Button type="submit" className="w-full">
+                            회원가입
+                        </Button>
+                    </CardContent>
+                </Card>
+            </form>
         </div>
     );
 }
