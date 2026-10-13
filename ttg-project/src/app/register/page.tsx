@@ -34,7 +34,7 @@ export default function Page() {
         // }
     }
 
-    const registUser = async (e) => {
+    const registUser = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if(password !== confirm){
