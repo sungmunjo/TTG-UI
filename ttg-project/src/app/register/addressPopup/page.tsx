@@ -5,7 +5,7 @@ import useSWRMutation from 'swr/mutation'
 import React, { useState, useEffect } from 'react'
 import {SearchParams} from "next/dist/server/request/search-params";
 
-const fetcher = url => fetch(url).then(res => res.json())
+const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function AddressSelect() {
     const [selectedSido, setSelectedSido] = useState('')
