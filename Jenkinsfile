@@ -50,6 +50,11 @@ pipeline {
                 sshagent(credentials: ['app-server-ssh']) {
                     sh '''
                         SSH="ssh -o StrictHostKeyChecking=accept-new ubuntu@$APP_HOST"
+                        # 첫 배포: compose 파일은 TTG-service 파이프라인이 올려준다. 아직 없으면 이미지만 올리고 끝낸다.
+                        if ! $SSH "test -f $DEPLOY_DIR/docker-compose.yml"; then
+                            echo "docker-compose.yml 이 아직 없음: TTG-service 를 한 번 배포하면 이 UI 이미지(latest)도 함께 뜬다"
+                            exit 0
+                        fi
                         $SSH "cd $DEPLOY_DIR \
                           && sed -i 's/^UI_TAG=.*/UI_TAG=$TAG/' .env \
                           && aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY \
