@@ -40,7 +40,7 @@ export function Header() {
                     <nav className="hidden md:flex items-center space-x-8">
                         <DropdownMenu>
                             <DropdownMenuTrigger className="flex items-center space-x-1 text-foreground hover:text-primary transition-colors">
-                                <span>제품</span>
+                                <span>제품 </span>
                                 <ChevronDown className="h-4 w-4" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
