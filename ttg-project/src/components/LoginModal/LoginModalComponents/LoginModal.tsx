@@ -1,14 +1,16 @@
 'use client'
 
-import {useEffect, useState} from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {Separator} from "@/components/ui/separator";
 import Link from "next/link";
+import { login } from '@/services/authService';
+import { useAuthStore } from '@/store/authStore';
 
 type Props = {
     open: boolean
@@ -16,16 +18,22 @@ type Props = {
 }
 
 export default function ModalDialog({ open, onClose }: Props) {
-    const [email, setEmail] = useState('');
+    const router = useRouter();
+    const setUser = useAuthStore((state) => state.setUser);
+    const [userEmail, setUserEmail] = useState('');
     const [password, setPassword] = useState('');
-    function setOpen(){
-        open = !open;
-    }
+    const [message, setMessage] = useState('');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // 여기에 로그인 로직을 구현하세요
-        console.log('로그인 시도:', { email, password });
+        try {
+            await login({ userEmail, password });
+            setUser(userEmail);
+            onClose();
+            router.push('/dashboard');
+        } catch (err) {
+            setMessage('❌ ' + (err as Error).message);
+        }
     };
 
     return (
@@ -49,8 +57,8 @@ export default function ModalDialog({ open, onClose }: Props) {
                                             id="email"
                                             type="email"
                                             placeholder="your@email.com"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            value={userEmail}
+                                            onChange={(e) => setUserEmail(e.target.value)}
                                             required
                                         />
                                     </div>
@@ -79,6 +87,10 @@ export default function ModalDialog({ open, onClose }: Props) {
                                     <Button type="submit" className="w-full">
                                         로그인
                                     </Button>
+
+                                    {message && (
+                                        <p className="text-sm text-center">{message}</p>
+                                    )}
                                 </form>
 
                                 <Separator />

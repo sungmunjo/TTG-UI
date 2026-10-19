@@ -1,29 +1,39 @@
-import { useState } from 'react';
+'use client'
+
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ChevronDown, Video, Users, Settings, LogIn, User } from 'lucide-react';
+import { useAuthStore } from '@/store/authStore';
 
-interface HeaderProps {
-    isLoggedIn?: boolean;
-    onLoginClick: () => void;
-    onPageChange: (page: string) => void;
-}
+export function Header() {
+    const router = useRouter();
+    const userEmail = useAuthStore((state) => state.userEmail);
+    const logout = useAuthStore((state) => state.logout);
 
-export function Header({ isLoggedIn = false, onLoginClick, onPageChange }: HeaderProps) {
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    };
+
     return (
         <header className="bg-background border-b border-border sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <div className="flex items-center">
-                        <button
-                            onClick={() => onPageChange('home')}
-                            className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
-                        >
+                        <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
                             <Video className="h-8 w-8 text-primary" />
                             <span className="text-xl font-semibold text-foreground">VirtuMeet</span>
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Navigation */}
@@ -72,7 +82,7 @@ export function Header({ isLoggedIn = false, onLoginClick, onPageChange }: Heade
 
                     {/* User Actions */}
                     <div className="flex items-center space-x-4">
-                        {isLoggedIn ? (
+                        {userEmail ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
                                     <Avatar className="h-8 w-8">
@@ -82,18 +92,29 @@ export function Header({ isLoggedIn = false, onLoginClick, onPageChange }: Heade
                                     </Avatar>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>프로필</DropdownMenuItem>
-                                    <DropdownMenuItem>설정</DropdownMenuItem>
-                                    <DropdownMenuItem>로그아웃</DropdownMenuItem>
+                                    <DropdownMenuItem className="text-sm text-muted-foreground" disabled>
+                                        {userEmail}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem asChild>
+                                        <Link href="/dashboard">대시보드</Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={handleLogout}>
+                                        로그아웃
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
                             <div className="flex items-center space-x-2">
-                                <Button variant="ghost" onClick={onLoginClick}>
-                                    <LogIn className="h-4 w-4 mr-2" />
-                                    로그인
-                                </Button>
-                                <Button>회원가입</Button>
+                                <Link href="/login">
+                                    <Button variant="ghost">
+                                        <LogIn className="h-4 w-4 mr-2" />
+                                        로그인
+                                    </Button>
+                                </Link>
+                                <Link href="/register">
+                                    <Button>회원가입</Button>
+                                </Link>
                             </div>
                         )}
                     </div>

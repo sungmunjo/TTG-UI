@@ -1,18 +1,27 @@
 
+'use client'
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/header/Header';
 import { Video, Users, Shield, Zap, Globe, HeadphonesIcon } from 'lucide-react';
 import Link from "next/link";
 import ModalDialog from '@/components/LoginModal/LoginModalWrapper'
+import UserGreeting from '@/components/auth/UserGreeting'
 
 
 export default function MainPage() {
+  const router = useRouter();
+  const userEmail = useAuthStore((state) => state.userEmail);
 
-  const onClose = () =>{
-
-  }
+  useEffect(() => {
+    if (userEmail) {
+      router.replace('/dashboard');
+    }
+  }, [userEmail, router]);
 
   const features = [
     {
@@ -49,10 +58,14 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
+            <div className="mb-4">
+              <UserGreeting />
+            </div>
             <h1 className="text-4xl sm:text-6xl mb-6 text-foreground">
               미래의 회의를 <br/>
               <span className="text-primary">지금 경험하세요</span>
